@@ -27,7 +27,7 @@ namespace Demo.Presention.Controllers
         [HttpPost]
         public IActionResult Create(CreatedDepartmentDTO createdDepartmentDTO)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
@@ -40,12 +40,28 @@ namespace Demo.Presention.Controllers
                 catch (Exception ex)
                 {
                     if (_environment.IsDevelopment())
-                        ModelState.AddModelError(string.Empty , ex.Message);
+                        ModelState.AddModelError(string.Empty, ex.Message);
                     else
                         _logger.LogError(ex.Message);
                 }
             }
             return View(createdDepartmentDTO);
+        }
+        #endregion
+
+        #region Department Details
+
+        [HttpGet]
+        public IActionResult Details(int? id)
+        {
+            if(!id.HasValue) return BadRequest();
+
+            var Department = _departmentServices.GetById(id.Value);
+
+            if (Department is null)
+                return NotFound();
+
+            return View(Department);
         }
         #endregion
 
