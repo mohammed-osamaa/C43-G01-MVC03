@@ -1,9 +1,13 @@
-﻿using Demo.BusinessLogicLayer.Services;
+﻿using Demo.BusinessLogicLayer.DTOS;
+using Demo.BusinessLogicLayer.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Demo.Presention.Controllers
 {
-    public class DepartmentController(IDepartmentServices _departmentServices) : Controller
+    public class DepartmentController(IDepartmentServices _departmentServices,
+        ILogger<DepartmentController> _logger,
+        IWebHostEnvironment _environment) : Controller
     {
         //BaseURl/Department/Index
         [HttpGet]
@@ -12,5 +16,38 @@ namespace Demo.Presention.Controllers
             var Departments = _departmentServices.GetAllDepartment();
             return View(Departments);
         }
+        #region Create Department
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(CreatedDepartmentDTO createdDepartmentDTO)
+        {
+            if(ModelState.IsValid)
+            {
+                try
+                {
+                    bool result = _departmentServices.CreateNewDepartment(createdDepartmentDTO);
+                    if (result)
+                        return RedirectToAction(nameof(Index)); // Send requst to Index Action 
+                    else
+                        ModelState.AddModelError(string.Empty, "Department Is not Created !!");
+                }
+                catch (Exception ex)
+                {
+                    if (_environment.IsDevelopment())
+                        ModelState.AddModelError(string.Empty , ex.Message);
+                    else
+                        _logger.LogError(ex.Message);
+                }
+            }
+            return View(createdDepartmentDTO);
+        }
+        #endregion
+
     }
 }
