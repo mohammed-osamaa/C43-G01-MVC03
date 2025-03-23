@@ -1,5 +1,6 @@
 ﻿using Demo.BusinessLogicLayer.DTOS;
-using Demo.BusinessLogicLayer.Services;
+using Demo.BusinessLogicLayer.DTOS.DepartmentDTOs;
+using Demo.BusinessLogicLayer.Services.DepartmentServices;
 using Demo.Presention.ViewModels.DepartmentViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Diagnostics;

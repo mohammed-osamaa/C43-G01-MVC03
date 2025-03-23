@@ -1,4 +1,4 @@
-using Demo.BusinessLogicLayer.Services;
+using Demo.BusinessLogicLayer.Services.DepartmentServices;
 using Demo.DataAccessLayer.Data;
 using Demo.DataAccessLayer.Repositories.Classes;
 using Demo.DataAccessLayer.Repositories.Interfaces;
