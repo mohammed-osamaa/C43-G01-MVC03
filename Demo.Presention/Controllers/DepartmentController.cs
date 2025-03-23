@@ -66,7 +66,7 @@ namespace Demo.Presention.Controllers
         }
         #endregion
 
-        #region Edit
+        #region Edit Department
 
         [HttpGet]
         public IActionResult Edit(int? id)
@@ -120,5 +120,45 @@ namespace Demo.Presention.Controllers
         }
         #endregion
 
+        #region Delete Department
+
+        //[HttpGet]
+        //public IActionResult Delete(int? id)
+        //{
+        //    if (!id.HasValue) return BadRequest();
+        //    var Department = _departmentServices.GetById(id.Value);
+        //    if (Department is null) return NotFound();
+        //    return View(Department);
+        //}
+
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            if (id == 0) return BadRequest();
+            try
+            {
+                bool result = _departmentServices.DeleteExistedDepartment(id);
+                if(result) return RedirectToAction(nameof(Index));
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Department is not Deleted.");
+                    return RedirectToAction(nameof(Delete), new { id });
+                }
+            }
+            catch (Exception ex)
+            {
+                if (_environment.IsDevelopment())
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    _logger.LogError(ex.Message);
+                    return View("ErrorView", ex.Message);
+                }
+            }
+        }
+        #endregion
     }
 }
