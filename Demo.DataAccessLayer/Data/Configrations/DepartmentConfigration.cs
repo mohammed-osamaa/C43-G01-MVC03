@@ -1,6 +1,8 @@
-﻿namespace Demo.DataAccessLayer.Data.Configrations
+﻿using Demo.DataAccessLayer.Models.DepartmentsModel;
+
+namespace Demo.DataAccessLayer.Data.Configrations
 {
-    internal class DepartmentConfigration : IEntityTypeConfiguration<Department>
+    internal class DepartmentConfigration : BaseEntityConfiguration<Department> , IEntityTypeConfiguration<Department>
     {
         public void Configure(EntityTypeBuilder<Department> builder)
         {
@@ -10,9 +12,9 @@
 
             // Configure DateTime for CreatedOn (Default Value) , LastModifiedOn (Calculated) in SQl
 
-            builder.Property(D => D.CreatedOn).HasDefaultValueSql("GETDATE()"); // Not Change , Execute within Insertion only
-            builder.Property(D => D.LastModifiedOn).HasComputedColumnSql("GETDATE()"); // Change once Modified Record
-
+            //builder.Property(D => D.CreatedOn).HasDefaultValueSql("GETDATE()"); // Not Change , Execute within Insertion only
+            //builder.Property(D => D.LastModifiedOn).HasComputedColumnSql("GETDATE()"); // Change once Modified Record
+             base.Configure(builder);
         }
     }
 
