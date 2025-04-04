@@ -27,6 +27,7 @@ namespace Demo.Presention.Controllers
         }
 
         [HttpPost]
+        //[ValidateAntiForgeryToken]
         public IActionResult Create(CreatedDepartmentDTO createdDepartmentDTO)
         {
             if (ModelState.IsValid)
