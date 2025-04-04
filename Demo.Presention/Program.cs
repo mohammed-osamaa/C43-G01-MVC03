@@ -1,3 +1,4 @@
+using Demo.BusinessLogicLayer.Profiles;
 using Demo.BusinessLogicLayer.Services.DepartmentServices;
 using Demo.DataAccessLayer.Data;
 using Demo.DataAccessLayer.Repositories.Classes;
@@ -25,6 +26,7 @@ namespace Demo.Presention
             
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             builder.Services.AddScoped<IDepartmentServices, DepartmentServices>();
+            builder.Services.AddAutoMapper(typeof(MappingProiles).Assembly);
             #endregion
 
             var app = builder.Build();
