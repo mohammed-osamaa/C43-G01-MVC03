@@ -1,4 +1,6 @@
 ﻿using Demo.DataAccessLayer.Data.Configrations;
+using Demo.DataAccessLayer.Models.DepartmentsModel;
+using Demo.DataAccessLayer.Models.EmployeesModel;
 using System.Reflection;
 
 namespace Demo.DataAccessLayer.Data
@@ -7,6 +9,7 @@ namespace Demo.DataAccessLayer.Data
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
     {
         public DbSet<Department> Departments { get; set; }
+        public DbSet<Employee> Employees { get; set; }
 
         // AddDbContext in DI Container to Create Options to Access Connection String
 

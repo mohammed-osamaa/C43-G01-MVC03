@@ -1,13 +1,13 @@
-﻿using Demo.BusinessLogicLayer.DTOS;
+﻿using Demo.BusinessLogicLayer.DTOS.DepartmentDTOs;
 using Demo.BusinessLogicLayer.Factory;
-using Demo.DataAccessLayer.Repositories;
+using Demo.DataAccessLayer.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Demo.BusinessLogicLayer.Services
+namespace Demo.BusinessLogicLayer.Services.DepartmentServices
 {
     public class DepartmentServices(IDepartmentRepository _departmentRepository) : IDepartmentServices
     {
