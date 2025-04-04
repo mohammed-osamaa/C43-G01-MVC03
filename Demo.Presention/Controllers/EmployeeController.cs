@@ -107,5 +107,36 @@ namespace Demo.Presention.Controllers
             return View(updated);
         }
         #endregion
+
+        #region Delete Employee
+        //[HttpGet]
+        //public IActionResult Delete(int? id)
+        //{
+        //    if(!id.HasValue) return BadRequest();   
+        //    var Emp = _employeeServices.GetById(id.Value);
+        //    if (Emp == null) return NotFound();
+        //    return View(Emp);
+        //}
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                var res = _employeeServices.DeleteExistedEmployee(id);
+                if (res)
+                    return RedirectToAction(nameof(Index));
+                else
+                    ModelState.AddModelError(string.Empty, "Can't Delete Employee !!");
+            }
+            catch (Exception ex)
+            {
+                if (_environment.IsDevelopment())
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                else
+                    _logger.LogError(ex.Message);
+            }
+            return View();
+        }
+        #endregion
     }
 }

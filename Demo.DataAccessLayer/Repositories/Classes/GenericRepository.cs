@@ -14,9 +14,9 @@ namespace Demo.DataAccessLayer.Repositories.Classes
         public IEnumerable<T> GetAll(bool WithTtracking = false)
         {
             if (WithTtracking)
-                return _dbContext.Set<T>().ToList();
+                return _dbContext.Set<T>().Where(t=>t.IsDeleted != true).ToList();
             else
-                return _dbContext.Set<T>().AsNoTracking().ToList();
+                return _dbContext.Set<T>().Where(t => t.IsDeleted != true).AsNoTracking().ToList();
         }
 
         public T? GetById(int id)
