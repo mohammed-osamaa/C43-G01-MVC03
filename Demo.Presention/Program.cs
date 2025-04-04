@@ -1,5 +1,6 @@
 using Demo.BusinessLogicLayer.Profiles;
 using Demo.BusinessLogicLayer.Services.DepartmentServices;
+using Demo.BusinessLogicLayer.Services.EmployeeServices;
 using Demo.DataAccessLayer.Data;
 using Demo.DataAccessLayer.Repositories.Classes;
 using Demo.DataAccessLayer.Repositories.Interfaces;
@@ -27,6 +28,8 @@ namespace Demo.Presention
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             builder.Services.AddScoped<IDepartmentServices, DepartmentServices>();
             builder.Services.AddAutoMapper(typeof(MappingProiles).Assembly);
+            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
             #endregion
 
             var app = builder.Build();
