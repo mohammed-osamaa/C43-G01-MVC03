@@ -18,8 +18,13 @@ namespace Demo.BusinessLogicLayer.DTOS.EmployeeDTOs
         public bool IsActive { get; set; }
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }
-        public DateTime HiringDate { get; set; }
+        public DateOnly HiringDate { get; set; }
         public Gender Gender { get; set; }
         public EmployeeType EmployeeType { get; set; }
+        public int CreatedBy { get; set; } // User Id
+        public DateTime CreatedOn { get; set; }
+        public int LastModifiedBy { get; set; } // User Id 
+        public DateTime LastModifiedOn { get; set; } // Calculated on BD
+        public bool IsDeleted { get; set; } // Flag to Soft Deleted
     }
 }

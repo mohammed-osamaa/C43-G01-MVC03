@@ -70,7 +70,7 @@ namespace Demo.BusinessLogicLayer.Factory
                 EmployeeType = employee.EmployeeType,
                 IsActive = employee.IsActive,
                 Address = employee.Address,
-                HiringDate = employee.HiringDate,
+                HiringDate = DateOnly.FromDateTime(employee.HiringDate),
                 PhoneNumber = employee.PhoneNumber,
             };
         }
