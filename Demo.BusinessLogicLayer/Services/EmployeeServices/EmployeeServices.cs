@@ -15,9 +15,15 @@ namespace Demo.BusinessLogicLayer.Services.EmployeeServices
     {
         public IEnumerable<EmployeeDto> GetAllEmployees()
         {
-            var Emps = _employeeRepository.GetAll().ToList();
+            var Emps = _employeeRepository.GetAll(E => new EmployeeDto 
+            {
+                Id = E.Id,
+                Name = E.Name,
+                Age = E.Age,
+                Salary = E.Salary,
+            }).Where(E=>E.Age < 25); // Filter in IEnumerable<>
             //return Emps.Select(E => E.ToDTO()).ToList();
-            return _mapper.Map<IEnumerable<Employee>,IEnumerable<EmployeeDto>>(Emps);
+            return Emps;
         }
 
         public EmployeeAllDetailsDTO? GetById(int id)
