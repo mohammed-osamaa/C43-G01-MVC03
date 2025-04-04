@@ -55,5 +55,57 @@ namespace Demo.Presention.Controllers
             return NotFound();
         }
         #endregion
+
+        #region Edit Existed Employee
+        [HttpGet]
+        public IActionResult Edit(int? id)
+        {
+            if (!id.HasValue) return BadRequest();
+            var emp = _employeeServices.GetById(id.Value);
+           
+            if (emp == null) return NotFound();
+            var EmployeeEdited = new UpdatedEmployeeDTO()
+            {
+                Id = emp.Id,
+                Name = emp.Name,
+                Address = emp.Address,
+                Age = emp.Age,
+                Salary = emp.Salary,
+                IsActive = emp.IsActive,
+                Email = emp.Email,
+                PhoneNumber = emp.PhoneNumber,
+                HiringDate = emp.HiringDate.ToDateTime(TimeOnly.MinValue),
+                EmployeeType = emp.EmployeeType,
+                Gender = emp.Gender,
+            };
+            return View(EmployeeEdited);
+        }
+
+        [HttpPost]
+        public IActionResult Edit([FromRoute]int? id ,UpdatedEmployeeDTO updated)
+        {
+            if(!id.HasValue || id != updated.Id) return BadRequest();   
+            if(ModelState.IsValid)
+            {
+                try
+                {
+                    var res = _employeeServices.UpdateExistedEmployee(updated);
+                    if (res)
+                        return RedirectToAction(nameof(Index));
+                    else
+                        ModelState.AddModelError(string.Empty, "Can't Update Employee !!");
+
+                }
+                catch (Exception ex)
+                {
+                    if (_environment.IsDevelopment())
+                        ModelState.AddModelError(string.Empty, ex.Message);
+                    else
+                        _logger.LogError(ex.Message);
+                }
+            }
+            return View(updated);
+        }
+        #endregion
     }
 }
