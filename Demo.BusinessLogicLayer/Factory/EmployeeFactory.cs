@@ -37,8 +37,6 @@ namespace Demo.BusinessLogicLayer.Factory
                 IsActive = employee.IsActive,
                 Address = employee.Address,
                 PhoneNumber = employee.PhoneNumber,
-                CreatedBy = employee.CreatedBy,
-                LastModifiedBy = employee.LastModifiedBy,
             };
         }
         public static Employee ToEntity(this UpdatedEmployeeDTO employee)

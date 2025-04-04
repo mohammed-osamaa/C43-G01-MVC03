@@ -15,8 +15,13 @@ namespace Demo.BusinessLogicLayer.Profiles
         public MappingProiles()
         {
             CreateMap<Employee,EmployeeDto>();
-            CreateMap<Employee,EmployeeAllDetailsDTO>();
-            CreateMap<CreatedEmployeeDTO, Employee>();
+
+            CreateMap<Employee,EmployeeAllDetailsDTO>()
+                .ForMember(D => D.HiringDate, opt => opt.MapFrom(scr => DateOnly.FromDateTime(scr.HiringDate)));
+
+            CreateMap<CreatedEmployeeDTO, Employee>()
+                .ForMember(D => D.HiringDate, opt => opt.MapFrom(scr => scr.HiringDate.ToDateTime(TimeOnly.MinValue)));
+
             CreateMap<UpdatedEmployeeDTO, Employee>();
         }
     }
