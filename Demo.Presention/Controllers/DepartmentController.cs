@@ -28,12 +28,19 @@ namespace Demo.Presention.Controllers
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public IActionResult Create(CreatedDepartmentDTO createdDepartmentDTO)
+        public IActionResult Create(DepartmentViewModel Created)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var createdDepartmentDTO = new CreatedDepartmentDTO()
+                    {
+                        Name = Created.Name,
+                        Code = Created.Code,
+                        Description = Created.Description,
+                        CreatedOn = Created.CreatedOn
+                    };
                     bool result = _departmentServices.CreateNewDepartment(createdDepartmentDTO);
                     if (result)
                         return RedirectToAction(nameof(Index)); // Send requst to Index Action 
@@ -48,7 +55,7 @@ namespace Demo.Presention.Controllers
                         _logger.LogError(ex.Message);
                 }
             }
-            return View(createdDepartmentDTO);
+            return View(Created);
         }
         #endregion
 
@@ -76,7 +83,7 @@ namespace Demo.Presention.Controllers
             if (!id.HasValue) return BadRequest();
             var Department = _departmentServices.GetById(id.Value);
             if (Department is null) return NotFound();
-            var EditedDepartment = new DepartmentEditViewModel()
+            var EditedDepartment = new DepartmentViewModel()
             {
                 Name = Department.Name,
                 Code = Department.Code,
@@ -87,7 +94,7 @@ namespace Demo.Presention.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit([FromRoute]int id ,DepartmentEditViewModel viewModel)
+        public IActionResult Edit([FromRoute]int id ,DepartmentViewModel viewModel)
         {
             if(ModelState.IsValid)
             {

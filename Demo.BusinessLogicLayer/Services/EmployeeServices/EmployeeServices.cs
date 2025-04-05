@@ -15,13 +15,17 @@ namespace Demo.BusinessLogicLayer.Services.EmployeeServices
     {
         public IEnumerable<EmployeeDto> GetAllEmployees()
         {
-            var Emps = _employeeRepository.GetAll(E => new EmployeeDto 
+            var Emps = _employeeRepository.GetAll(E => new EmployeeDto
             {
                 Id = E.Id,
                 Name = E.Name,
                 Age = E.Age,
                 Salary = E.Salary,
-            }).Where(E=>E.Age < 25); // Filter in IEnumerable<>
+                IsActive = E.IsActive,
+                Gender = E.Gender,
+                Email = E.Email,
+                EmployeeType = E.EmployeeType
+            });
             //return Emps.Select(E => E.ToDTO()).ToList();
             return Emps;
         }
