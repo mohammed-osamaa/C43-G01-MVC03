@@ -1,15 +1,19 @@
 ﻿using Demo.BusinessLogicLayer.DTOS.EmployeeDTOs;
+using Demo.BusinessLogicLayer.Services.DepartmentServices;
 using Demo.BusinessLogicLayer.Services.EmployeeServices;
+using Demo.Presention.ViewModels.EmployeeViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.Presention.Controllers
 {
     public class EmployeeController(IEmployeeServices _employeeServices
-        , ILogger<EmployeeController> _logger , IWebHostEnvironment _environment) : Controller
+        , ILogger<EmployeeController> _logger ,
+        IWebHostEnvironment _environment) : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(string? EmployeeSearchName)
         {
-            var Employess = _employeeServices.GetAllEmployees();
+            var Employess = _employeeServices.GetAllEmployees(EmployeeSearchName);
+            ViewData["SearchName"] = EmployeeSearchName;
             return View(Employess);
         }
 
@@ -20,10 +24,24 @@ namespace Demo.Presention.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(CreatedEmployeeDTO createdEmployeeDTO)
+        public IActionResult Create(EmployeeViewModel Created)
         {
             if(ModelState.IsValid)
             {
+                var createdEmployeeDTO = new CreatedEmployeeDTO()
+                {
+                    Name = Created.Name,
+                    Address = Created.Address,
+                    Age = Created.Age,
+                    Salary = Created.Salary,
+                    IsActive = Created.IsActive,
+                    Email = Created.Email,
+                    PhoneNumber = Created.PhoneNumber,
+                    HiringDate = Created.HiringDate,
+                    EmployeeType = Created.EmployeeType,
+                    Gender = Created.Gender,
+                    DepartmentId = Created.DepartmentId,
+                };
                 try
                 {
                     var res = _employeeServices.CreateNewEmployee(createdEmployeeDTO);
@@ -41,7 +59,7 @@ namespace Demo.Presention.Controllers
                 }
             }
 
-            return View(createdEmployeeDTO);
+            return View(Created);
         }
         #endregion
 
@@ -64,9 +82,8 @@ namespace Demo.Presention.Controllers
             var emp = _employeeServices.GetById(id.Value);
            
             if (emp == null) return NotFound();
-            var EmployeeEdited = new UpdatedEmployeeDTO()
+            var EmployeeEdited = new EmployeeViewModel()
             {
-                Id = emp.Id,
                 Name = emp.Name,
                 Address = emp.Address,
                 Age = emp.Age,
@@ -74,22 +91,38 @@ namespace Demo.Presention.Controllers
                 IsActive = emp.IsActive,
                 Email = emp.Email,
                 PhoneNumber = emp.PhoneNumber,
-                HiringDate = emp.HiringDate.ToDateTime(TimeOnly.MinValue),
+                HiringDate = emp.HiringDate,
                 EmployeeType = emp.EmployeeType,
                 Gender = emp.Gender,
+                DepartmentId = emp.DepartmentId,
             };
             return View(EmployeeEdited);
         }
 
         [HttpPost]
-        public IActionResult Edit([FromRoute]int? id ,UpdatedEmployeeDTO updated)
+        public IActionResult Edit([FromRoute]int? id ,EmployeeViewModel updated)
         {
-            if(!id.HasValue || id != updated.Id) return BadRequest();   
+            if(!id.HasValue) return BadRequest();   
             if(ModelState.IsValid)
             {
+                var updatedEmployeeDTO = new UpdatedEmployeeDTO()
+                {
+                    Id = id.Value,
+                    Name = updated.Name,
+                    Address = updated.Address,
+                    Age = updated.Age,
+                    Salary = updated.Salary,
+                    IsActive = updated.IsActive,
+                    Email =updated.Email,
+                    PhoneNumber = updated.PhoneNumber,
+                    HiringDate = updated.HiringDate.ToDateTime(TimeOnly.MinValue),
+                    EmployeeType = updated.EmployeeType,
+                    Gender = updated.Gender,
+                    DepartmentId = updated.DepartmentId,
+                };
                 try
                 {
-                    var res = _employeeServices.UpdateExistedEmployee(updated);
+                    var res = _employeeServices.UpdateExistedEmployee(updatedEmployeeDTO);
                     if (res)
                         return RedirectToAction(nameof(Index));
                     else

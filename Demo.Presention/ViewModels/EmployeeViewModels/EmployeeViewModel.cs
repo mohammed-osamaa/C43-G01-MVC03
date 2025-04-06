@@ -1,29 +1,11 @@
 ﻿using Demo.DataAccessLayer.Models.EmployeesModel;
 using Demo.DataAccessLayer.Models.Shared.Enums;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Demo.BusinessLogicLayer.DTOS.EmployeeDTOs
+namespace Demo.Presention.ViewModels.EmployeeViewModels
 {
-    public class CreatedEmployeeDTO
+    public class EmployeeViewModel
     {
-        //public string Name { get; set; } = null!;
-        //public string? Address { get; set; }
-        //public int Age { get; set; }
-        //public decimal Salary { get; set; }
-        //public bool IsActive { get; set; }
-        //public string? Email { get; set; }
-        //public string? PhoneNumber { get; set; }
-        //public DateTime HiringDate { get; set; }
-        //public Gender Gender { get; set; }
-        //public EmployeeType EmployeeType { get; set; }
-        //public int CreatedBy { get; set; } // User Id
-        //public int LastModifiedBy { get; set; } // User Id 
-
         [Required]
         [MaxLength(50, ErrorMessage = "Max length should be 50 character")]
         [MinLength(5, ErrorMessage = "Min length should be 5 characters")]
@@ -46,6 +28,7 @@ namespace Demo.BusinessLogicLayer.DTOS.EmployeeDTOs
         public DateOnly HiringDate { get; set; }
         public Gender Gender { get; set; }
         public EmployeeType EmployeeType { get; set; }
-        public int? DepartmentId { get; set; }
+        [Display(Name = "Department")]
+        public int? DepartmentId { get; set; } 
     }
 }

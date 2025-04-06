@@ -27,13 +27,15 @@ namespace Demo.Presention
                 //options.UseSqlServer("ConnentionString"); 
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
                 // Go to AppSetting.json , Search ConnectionString Scope and Get it By Name (Default) 
+                options.UseLazyLoadingProxies();
             });
             
-            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            //builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IDepartmentServices, DepartmentServices>();
             builder.Services.AddAutoMapper(typeof(MappingProiles).Assembly);
-            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             #endregion
 
             var app = builder.Build();

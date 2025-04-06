@@ -11,7 +11,7 @@ namespace Demo.BusinessLogicLayer.Services.EmployeeServices
     {
         bool CreateNewEmployee(CreatedEmployeeDTO dto);
         bool DeleteExistedEmployee(int id);
-        IEnumerable<EmployeeDto> GetAllEmployees();
+        IEnumerable<EmployeeDto> GetAllEmployees(string? EmployeeSearchName);
         EmployeeAllDetailsDTO? GetById(int id);
         bool UpdateExistedEmployee(UpdatedEmployeeDTO dto);
     }
