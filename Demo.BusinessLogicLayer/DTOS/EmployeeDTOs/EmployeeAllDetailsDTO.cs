@@ -26,6 +26,7 @@ namespace Demo.BusinessLogicLayer.DTOS.EmployeeDTOs
         public int LastModifiedBy { get; set; } // User Id 
         public DateTime LastModifiedOn { get; set; } // Calculated on BD
         public bool IsDeleted { get; set; } // Flag to Soft Deleted
-        public int? DepartmentId { get; set; } 
+        public int? DepartmentId { get; set; }
+        public string? Department { get; set; } // Department Name
     }
 }

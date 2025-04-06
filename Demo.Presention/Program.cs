@@ -27,6 +27,7 @@ namespace Demo.Presention
                 //options.UseSqlServer("ConnentionString"); 
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
                 // Go to AppSetting.json , Search ConnectionString Scope and Get it By Name (Default) 
+                options.UseLazyLoadingProxies();
             });
             
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();

@@ -93,6 +93,7 @@ namespace Demo.Presention.Controllers
                 HiringDate = emp.HiringDate,
                 EmployeeType = emp.EmployeeType,
                 Gender = emp.Gender,
+                DepartmentId = emp.DepartmentId,
             };
             return View(EmployeeEdited);
         }

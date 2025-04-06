@@ -12,6 +12,6 @@ namespace Demo.DataAccessLayer.Models.DepartmentsModel
         public string Name { get; set; } = null!;
         public string? Description { get; set; } = null!;
         public string Code { get; set; } = null!;
-        public ICollection<Employee> Employees { get; set; } = new HashSet<Employee>();
+        public virtual ICollection<Employee> Employees { get; set; } = new HashSet<Employee>();
     }
 }
