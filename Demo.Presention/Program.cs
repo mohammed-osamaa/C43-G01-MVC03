@@ -35,6 +35,7 @@ namespace Demo.Presention
             builder.Services.AddAutoMapper(typeof(MappingProiles).Assembly);
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             #endregion
 
             var app = builder.Build();

@@ -25,20 +25,17 @@ namespace Demo.DataAccessLayer.Repositories.Classes
             var T = _dbContext.Set<T>().Find(id);
             return T;
         }
-        public int add(T entity)
+        public void add(T entity)
         {
             _dbContext.Set<T>().Add(entity);
-            return _dbContext.SaveChanges();
         }
-        public int Update(T entity)
+        public void Update(T entity)
         {
             _dbContext.Set<T>().Update(entity);
-            return _dbContext.SaveChanges();
         }
-        public int Delete(T entity)
+        public void Delete(T entity)
         {
             _dbContext.Set<T>().Remove(entity);
-            return _dbContext.SaveChanges();
         }
         public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector)
         {

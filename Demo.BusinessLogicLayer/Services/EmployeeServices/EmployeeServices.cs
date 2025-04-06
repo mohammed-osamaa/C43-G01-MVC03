@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Demo.BusinessLogicLayer.Services.EmployeeServices
 {
-    public class EmployeeServices(IEmployeeRepository _employeeRepository, IMapper _mapper) : IEmployeeServices
+    public class EmployeeServices(IUnitOfWork _unitOfWork, IMapper _mapper) : IEmployeeServices
     {
         public IEnumerable<EmployeeDto> GetAllEmployees(string? EmployeeSearchName)
         {
@@ -29,16 +29,16 @@ namespace Demo.BusinessLogicLayer.Services.EmployeeServices
             //return Emps.Select(E => E.ToDTO()).ToList();
             IEnumerable<Employee> Emps;
             if (string.IsNullOrEmpty(EmployeeSearchName))
-                Emps = _employeeRepository.GetAll();
+                Emps = _unitOfWork.EmployeeRepository.GetAll();
             else
-                Emps = _employeeRepository.GetAll(E => E.Name.ToLower().Contains(EmployeeSearchName.ToLower()));
+                Emps = _unitOfWork.EmployeeRepository.GetAll(E => E.Name.ToLower().Contains(EmployeeSearchName.ToLower()));
             var EmpsDTO = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeDto>>(Emps);
             return EmpsDTO;
         }
 
         public EmployeeAllDetailsDTO? GetById(int id)
         {
-            var emp = _employeeRepository.GetById(id);
+            var emp = _unitOfWork.EmployeeRepository.GetById(id);
             //return emp?.ToDetailsDTo();
             if (emp == null) return null;
             var EmpAllDetails = _mapper.Map<Employee,EmployeeAllDetailsDTO>(emp);
@@ -48,20 +48,20 @@ namespace Demo.BusinessLogicLayer.Services.EmployeeServices
         {
             //var Emp = dto.ToEntity();
             var Emp = _mapper.Map<CreatedEmployeeDTO , Employee>(dto);
-            var res = _employeeRepository.add(Emp);
-            return res > 0 ? true : false;
+            _unitOfWork.EmployeeRepository.add(Emp);
+            return _unitOfWork.SaveChanges() > 0 ? true : false;
         }
 
         public bool UpdateExistedEmployee(UpdatedEmployeeDTO dto)
         {
             //var Emp = dto.ToEntity();
             var Emp = _mapper.Map<UpdatedEmployeeDTO, Employee>(dto);
-            var res = _employeeRepository.Update(Emp);
-            return res > 0 ? true : false;
+            _unitOfWork.EmployeeRepository.Update(Emp);
+            return _unitOfWork.SaveChanges() > 0 ? true : false;
         }
         public bool DeleteExistedEmployee(int id)
         {
-            var emp = _employeeRepository.GetById(id);
+            var emp = _unitOfWork.EmployeeRepository.GetById(id);
             //// Hard Delete
             ///
             //if (emp != null)
@@ -74,7 +74,8 @@ namespace Demo.BusinessLogicLayer.Services.EmployeeServices
             ////Soft Delete
             if(emp == null) return false;
             emp.IsDeleted = true;
-            return _employeeRepository.Update(emp) > 0 ? true : false ;
+            _unitOfWork.EmployeeRepository.Update(emp);
+            return _unitOfWork.SaveChanges() > 0 ? true : false;
         }
 
     }
