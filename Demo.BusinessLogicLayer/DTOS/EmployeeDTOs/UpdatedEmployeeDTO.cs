@@ -23,5 +23,6 @@ namespace Demo.BusinessLogicLayer.DTOS.EmployeeDTOs
         public EmployeeType EmployeeType { get; set; }
         public int CreatedBy { get; set; } // User Id
         public int LastModifiedBy { get; set; } // User Id 
+        public int? DepartmentId { get; set; } 
     }
 }

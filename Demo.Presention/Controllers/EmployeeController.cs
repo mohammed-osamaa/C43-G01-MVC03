@@ -1,4 +1,5 @@
 ﻿using Demo.BusinessLogicLayer.DTOS.EmployeeDTOs;
+using Demo.BusinessLogicLayer.Services.DepartmentServices;
 using Demo.BusinessLogicLayer.Services.EmployeeServices;
 using Demo.Presention.ViewModels.EmployeeViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Demo.Presention.Controllers
 {
     public class EmployeeController(IEmployeeServices _employeeServices
-        , ILogger<EmployeeController> _logger , IWebHostEnvironment _environment) : Controller
+        , ILogger<EmployeeController> _logger ,
+        IWebHostEnvironment _environment) : Controller
     {
         public IActionResult Index()
         {
@@ -37,6 +39,7 @@ namespace Demo.Presention.Controllers
                     HiringDate = Created.HiringDate,
                     EmployeeType = Created.EmployeeType,
                     Gender = Created.Gender,
+                    DepartmentId = Created.DepartmentId,
                 };
                 try
                 {
@@ -113,6 +116,7 @@ namespace Demo.Presention.Controllers
                     HiringDate = updated.HiringDate.ToDateTime(TimeOnly.MinValue),
                     EmployeeType = updated.EmployeeType,
                     Gender = updated.Gender,
+                    DepartmentId = updated.DepartmentId,
                 };
                 try
                 {

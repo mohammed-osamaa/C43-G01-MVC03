@@ -1,8 +1,11 @@
 ﻿@using Demo.DataAccessLayer.Models.EmployeesModel
 @using Demo.DataAccessLayer.Models.Shared.Enums
 @using Demo.Presention.ViewModels.EmployeeViewModels
+@inject IDepartmentServices departmentServices
 @model EmployeeViewModel
-
+@{
+    var Departments = new SelectList(departmentServices.GetAllDepartment(),nameof(DepartmentDto.Id), nameof(DepartmentDto.Name));
+}
 <div class="form-group mb-3 col-6">
     <label class="form-label" asp-for="Name"></label>
     <input asp-for="Name" class="form-control" />
@@ -62,4 +65,12 @@
 <div class="form-group mb-3 col-6">
     <input asp-for="IsActive" class="form-check-input" />
     <label class="col-form-label" asp-for="IsActive"></label>
+</div>
+<div class="form-group mb-3 col-6">
+    <label class="form-label" asp-for="DepartmentId"></label>
+    <select asp-for="DepartmentId" asp-items="Departments"
+            class="form-control">
+        <option value="@null">Select Department</option>
+    </select>
+    <span asp-validation-for="DepartmentId" class="text-danger"></span>
 </div>
