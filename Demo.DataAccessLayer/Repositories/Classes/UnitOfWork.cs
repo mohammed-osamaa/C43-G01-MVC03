@@ -11,18 +11,17 @@ namespace Demo.DataAccessLayer.Repositories.Classes
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly IDepartmentRepository _departmentRepository;
-        private readonly IEmployeeRepository _employeeRepository;
-        public UnitOfWork(IDepartmentRepository departmentRepository,
-            IEmployeeRepository employeeRepository, ApplicationDbContext dbContext)
+        private readonly Lazy<IDepartmentRepository> _departmentRepository;
+        private readonly Lazy<IEmployeeRepository> _employeeRepository;
+        public UnitOfWork(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
-            _departmentRepository = departmentRepository;
-            _employeeRepository = employeeRepository;
+            _departmentRepository = new Lazy<IDepartmentRepository>(() => new DepartmentRepository(_dbContext));
+            _employeeRepository = new Lazy<IEmployeeRepository>(() => new EmployeeRepository(_dbContext));
         }
-        public IEmployeeRepository EmployeeRepository => _employeeRepository;
+        public IEmployeeRepository EmployeeRepository => _employeeRepository.Value;
 
-        public IDepartmentRepository DepartmentRepository => _departmentRepository;
+        public IDepartmentRepository DepartmentRepository => _departmentRepository.Value;
 
         public int SaveChanges()
         {
