@@ -15,12 +15,13 @@ namespace Demo.Presention.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            ViewBag.Message = "Welcome to Department Index Page (Bag)"; // Dynamic Determine DataType in Runtime 
-                                                                        // Not Need Casting , Not Safe (Throw Exception)
-            ViewData["Message"] = "Welcome to Department Index Page (Data)"; // Support Casting 
+            //ViewBag.Message = "Welcome to Department Index Page (Bag)"; // Dynamic Determine DataType in Runtime 
+            //                                                            // Not Need Casting , Not Safe (Throw Exception)
+            //ViewData["Message"] = "Welcome to Department Index Page (Data)"; // Support Casting 
             
-            ViewBag.Dept01 = new DepartmentDto() { Name = "Dept01"};
-            ViewData["Dept02"] = new DepartmentDto() { Name = "Dept02" };
+            //ViewBag.Dept01 = new DepartmentDto() { Name = "Dept01"};
+            //ViewData["Dept02"] = new DepartmentDto() { Name = "Dept02" };
+
             var Departments = _departmentServices.GetAllDepartment();
             return View(Departments);
         }
@@ -48,10 +49,22 @@ namespace Demo.Presention.Controllers
                         CreatedOn = Created.CreatedOn
                     };
                     bool result = _departmentServices.CreateNewDepartment(createdDepartmentDTO);
+                    string message = string.Empty;
+                    string status = string.Empty;
                     if (result)
-                        return RedirectToAction(nameof(Index)); // Send requst to Index Action 
+                    {
+                        message = $"Department {Created.Name} Created Successfully.";
+                        status = "Success";
+                    }
                     else
-                        ModelState.AddModelError(string.Empty, "Department Is not Created !!");
+                    {
+                        message = $"Department {Created.Name} is not Created.";
+                        status = "Error";
+                    }
+                    TempData["Message"] = message;
+                    TempData["Status"] = status;
+                    return RedirectToAction(nameof(Index));
+
                 }
                 catch (Exception ex)
                 {
