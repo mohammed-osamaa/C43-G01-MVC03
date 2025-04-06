@@ -15,6 +15,12 @@ namespace Demo.Presention.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            ViewBag.Message = "Welcome to Department Index Page (Bag)"; // Dynamic Determine DataType in Runtime 
+                                                                        // Not Need Casting , Not Safe (Throw Exception)
+            ViewData["Message"] = "Welcome to Department Index Page (Data)"; // Support Casting 
+            
+            ViewBag.Dept01 = new DepartmentDto() { Name = "Dept01"};
+            ViewData["Dept02"] = new DepartmentDto() { Name = "Dept02" };
             var Departments = _departmentServices.GetAllDepartment();
             return View(Departments);
         }

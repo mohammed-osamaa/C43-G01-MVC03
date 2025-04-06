@@ -1,7 +1,15 @@
 ﻿@model IEnumerable<DepartmentDto>
 @{
     ViewData["Title"] = "Index";
+	var Dept02 = ViewData["Dept02"] as DepartmentDto;
 }
+
+<div class="alert alert-success">
+    @ViewBag.Dept01.Name @* if Dept01 is null , ViewBag Throw Exception *@
+    <br />
+    <br />
+    @Dept02?.Name
+</div>
 
 <h1>All Departments</h1>
 <br />
