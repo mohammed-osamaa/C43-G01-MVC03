@@ -10,9 +10,10 @@ namespace Demo.Presention.Controllers
         , ILogger<EmployeeController> _logger ,
         IWebHostEnvironment _environment) : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(string? EmployeeSearchName)
         {
-            var Employess = _employeeServices.GetAllEmployees();
+            var Employess = _employeeServices.GetAllEmployees(EmployeeSearchName);
+            ViewData["SearchName"] = EmployeeSearchName;
             return View(Employess);
         }
 

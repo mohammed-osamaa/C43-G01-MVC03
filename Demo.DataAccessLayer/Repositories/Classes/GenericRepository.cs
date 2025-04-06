@@ -44,5 +44,10 @@ namespace Demo.DataAccessLayer.Repositories.Classes
         {
             return _dbContext.Set<T>().Where(t => t.IsDeleted != true).Select(selector).ToList(); // Filter in IEnumerable<>
         }
+
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>> predicate)
+        {
+            return _dbContext.Set<T>().Where(predicate).ToList(); // Filter in IEnumerable<>
+        }
     }
 }

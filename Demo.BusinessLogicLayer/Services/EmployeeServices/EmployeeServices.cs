@@ -13,7 +13,7 @@ namespace Demo.BusinessLogicLayer.Services.EmployeeServices
 {
     public class EmployeeServices(IEmployeeRepository _employeeRepository, IMapper _mapper) : IEmployeeServices
     {
-        public IEnumerable<EmployeeDto> GetAllEmployees()
+        public IEnumerable<EmployeeDto> GetAllEmployees(string? EmployeeSearchName)
         {
             //var Emps = _employeeRepository.GetAll(E => new EmployeeDto
             //{
@@ -27,7 +27,11 @@ namespace Demo.BusinessLogicLayer.Services.EmployeeServices
             //    EmployeeType = E.EmployeeType
             //});
             //return Emps.Select(E => E.ToDTO()).ToList();
-            var Emps = _employeeRepository.GetAll();
+            IEnumerable<Employee> Emps;
+            if (string.IsNullOrEmpty(EmployeeSearchName))
+                Emps = _employeeRepository.GetAll();
+            else
+                Emps = _employeeRepository.GetAll(E => E.Name.ToLower().Contains(EmployeeSearchName.ToLower()));
             var EmpsDTO = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeDto>>(Emps);
             return EmpsDTO;
         }

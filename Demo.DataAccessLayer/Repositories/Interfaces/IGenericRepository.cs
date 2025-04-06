@@ -22,6 +22,7 @@ namespace Demo.DataAccessLayer.Repositories.Interfaces
         int Delete(T entity);
         IEnumerable<T> GetAll(bool WithTtracking = false);
         IEnumerable<TResult> GetAll<TResult>(Expression<Func<T,TResult>> selector);
+        IEnumerable<T> GetAll(Expression<Func<T,bool>> predicate);
         T? GetById(int id);
         int Update(T entity);
     }
