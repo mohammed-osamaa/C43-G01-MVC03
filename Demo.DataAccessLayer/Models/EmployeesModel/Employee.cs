@@ -22,5 +22,6 @@ namespace Demo.DataAccessLayer.Models.EmployeesModel
         public EmployeeType EmployeeType { get; set; }
         public int? DepartmentId { get; set; } // FK
         public virtual Department? Department { get; set; } 
+        public string? ImageName { get; set; }
     }
 }

@@ -29,6 +29,9 @@ namespace Demo.Presention.ViewModels.EmployeeViewModels
         public Gender Gender { get; set; }
         public EmployeeType EmployeeType { get; set; }
         [Display(Name = "Department")]
-        public int? DepartmentId { get; set; } 
+        public int? DepartmentId { get; set; }
+        [Display(Name = "Profile Image")]
+        public IFormFile? ProfileImage { get; set; }
+        public string? ProfileImageName { get; set; }
     }
 }

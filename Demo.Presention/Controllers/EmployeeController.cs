@@ -41,6 +41,7 @@ namespace Demo.Presention.Controllers
                     EmployeeType = Created.EmployeeType,
                     Gender = Created.Gender,
                     DepartmentId = Created.DepartmentId,
+                    ProfileImage = Created.ProfileImage,
                 };
                 try
                 {
@@ -95,6 +96,7 @@ namespace Demo.Presention.Controllers
                 EmployeeType = emp.EmployeeType,
                 Gender = emp.Gender,
                 DepartmentId = emp.DepartmentId,
+                ProfileImageName = emp.ProfileImageName,
             };
             return View(EmployeeEdited);
         }
@@ -119,6 +121,7 @@ namespace Demo.Presention.Controllers
                     EmployeeType = updated.EmployeeType,
                     Gender = updated.Gender,
                     DepartmentId = updated.DepartmentId,
+                    ProfileImage = updated.ProfileImage,
                 };
                 try
                 {

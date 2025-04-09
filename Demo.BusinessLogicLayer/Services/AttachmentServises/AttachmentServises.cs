@@ -13,7 +13,7 @@ namespace Demo.BusinessLogicLayer.Services.AttachmentServises
         const int MaxSize = 2_097_152; // 2MB
         public string? UploadFile(IFormFile file, string FolderName)
         {
-            string fileExtension = Path.GetExtension(file.Name);
+            string fileExtension = Path.GetExtension(file.FileName);
             // Check if the file extension is valid
             // Check if the file size is within the limit
             if (!Extensions.Contains(fileExtension) || file.Length == 0 || file.Length > MaxSize)

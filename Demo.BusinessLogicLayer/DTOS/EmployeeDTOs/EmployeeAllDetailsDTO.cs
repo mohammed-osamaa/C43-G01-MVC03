@@ -28,5 +28,6 @@ namespace Demo.BusinessLogicLayer.DTOS.EmployeeDTOs
         public bool IsDeleted { get; set; } // Flag to Soft Deleted
         public int? DepartmentId { get; set; }
         public string? Department { get; set; } // Department Name
+        public string? ProfileImageName { get; set; } // Image Name
     }
 }
