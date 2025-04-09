@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Demo.BusinessLogicLayer.DTOS.EmployeeDTOs;
 using Demo.BusinessLogicLayer.Factory;
+using Demo.BusinessLogicLayer.Services.AttachmentServises;
 using Demo.DataAccessLayer.Models.EmployeesModel;
 using Demo.DataAccessLayer.Repositories.Interfaces;
 using System;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Demo.BusinessLogicLayer.Services.EmployeeServices
 {
-    public class EmployeeServices(IUnitOfWork _unitOfWork, IMapper _mapper) : IEmployeeServices
+    public class EmployeeServices(IUnitOfWork _unitOfWork, IMapper _mapper,IAttachmentServices _attachmentServices) : IEmployeeServices
     {
         public IEnumerable<EmployeeDto> GetAllEmployees(string? EmployeeSearchName)
         {

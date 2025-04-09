@@ -1,4 +1,5 @@
 using Demo.BusinessLogicLayer.Profiles;
+using Demo.BusinessLogicLayer.Services.AttachmentServises;
 using Demo.BusinessLogicLayer.Services.DepartmentServices;
 using Demo.BusinessLogicLayer.Services.EmployeeServices;
 using Demo.DataAccessLayer.Data;
@@ -36,6 +37,7 @@ namespace Demo.Presention
             builder.Services.AddAutoMapper(typeof(MappingProiles).Assembly);
             builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IAttachmentServices, AttachmentServises>();
             #endregion
 
             var app = builder.Build();
