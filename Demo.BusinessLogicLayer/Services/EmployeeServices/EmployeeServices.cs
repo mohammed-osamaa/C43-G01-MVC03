@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Demo.BusinessLogicLayer.DTOS.EmployeeDTOs;
 using Demo.BusinessLogicLayer.Factory;
+using Demo.BusinessLogicLayer.Services.AttachmentServises;
 using Demo.DataAccessLayer.Models.EmployeesModel;
 using Demo.DataAccessLayer.Repositories.Interfaces;
 using System;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Demo.BusinessLogicLayer.Services.EmployeeServices
 {
-    public class EmployeeServices(IUnitOfWork _unitOfWork, IMapper _mapper) : IEmployeeServices
+    public class EmployeeServices(IUnitOfWork _unitOfWork, IMapper _mapper,IAttachmentServices _attachmentServices) : IEmployeeServices
     {
         public IEnumerable<EmployeeDto> GetAllEmployees(string? EmployeeSearchName)
         {
@@ -48,15 +49,31 @@ namespace Demo.BusinessLogicLayer.Services.EmployeeServices
         {
             //var Emp = dto.ToEntity();
             var Emp = _mapper.Map<CreatedEmployeeDTO , Employee>(dto);
+            if (dto.ProfileImage is not null)
+                Emp.ImageName = _attachmentServices.UploadFile(dto.ProfileImage, "Images");
             _unitOfWork.EmployeeRepository.add(Emp);
             return _unitOfWork.SaveChanges() > 0 ? true : false;
         }
 
         public bool UpdateExistedEmployee(UpdatedEmployeeDTO dto)
         {
-            //var Emp = dto.ToEntity();
-            var Emp = _mapper.Map<UpdatedEmployeeDTO, Employee>(dto);
-            _unitOfWork.EmployeeRepository.Update(Emp);
+            var emp = _unitOfWork.EmployeeRepository.GetById(dto.Id);
+
+            if (emp == null) return false;
+
+            _mapper.Map(dto, emp);
+
+            if (dto.ProfileImage is not null)
+            {
+                // Delete the old image from the server
+                 if(emp.ImageName != null)
+                 {
+                     var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Files\\Images", emp.ImageName);
+                     _attachmentServices.DeleteFile(oldImagePath);
+                 }
+                 emp.ImageName = _attachmentServices.UploadFile(dto.ProfileImage, "Images");
+            }  
+            _unitOfWork.EmployeeRepository.Update(emp);
             return _unitOfWork.SaveChanges() > 0 ? true : false;
         }
         public bool DeleteExistedEmployee(int id)

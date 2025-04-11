@@ -16,9 +16,10 @@ namespace Demo.BusinessLogicLayer.Profiles
         {
             CreateMap<Employee,EmployeeDto>().ForMember(D => D.Department, opt => opt.MapFrom(scr => scr.Department != null ? scr.Department.Name : null));
 
-            CreateMap<Employee,EmployeeAllDetailsDTO>()
+            CreateMap<Employee, EmployeeAllDetailsDTO>()
                 .ForMember(D => D.HiringDate, opt => opt.MapFrom(scr => DateOnly.FromDateTime(scr.HiringDate)))
-                .ForMember(D=>D.Department , opt =>opt.MapFrom(scr=>scr.Department != null ? scr.Department.Name : null));
+                .ForMember(D => D.Department, opt => opt.MapFrom(scr => scr.Department != null ? scr.Department.Name : null))
+                .ForMember(D => D.ProfileImageName, opt => opt.MapFrom(scr => scr.ImageName));
 
             CreateMap<CreatedEmployeeDTO, Employee>()
                 .ForMember(D => D.HiringDate, opt => opt.MapFrom(scr => scr.HiringDate.ToDateTime(TimeOnly.MinValue)));

@@ -4,6 +4,16 @@
 }
 
 <h1 class="my-5 w-75">Employee Details</h1>
+@if(!string.IsNullOrEmpty(Model.ProfileImageName))
+{
+    <div>
+        <img src="~/Files/Images/@Model.ProfileImageName" alt="Employee Image" class="img-fluid rounded-circle mb-4" style="width: 150px; height: 150px;" />
+    </div>
+}
+else
+{
+    <h4>No Image Avalaible</h4>
+}
 <ul class="nav nav-tabs" id="employeeTabs" role="tablist">
     <li class="nav-item" role="presentation">
         <a class="nav-link active" id="general-tab" data-bs-toggle="tab" href="#general" role="tab" aria-controls="general" aria-selected="true">General</a>

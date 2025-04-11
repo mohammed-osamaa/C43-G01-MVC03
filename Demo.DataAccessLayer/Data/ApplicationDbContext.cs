@@ -1,12 +1,14 @@
 ﻿using Demo.DataAccessLayer.Data.Configrations;
 using Demo.DataAccessLayer.Models.DepartmentsModel;
 using Demo.DataAccessLayer.Models.EmployeesModel;
+using Demo.DataAccessLayer.Models.IdentityModel;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.Reflection;
 
 namespace Demo.DataAccessLayer.Data
 {
     // Using Primary Constructor
-    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options)
     {
         public DbSet<Department> Departments { get; set; }
         public DbSet<Employee> Employees { get; set; }
@@ -25,7 +27,8 @@ namespace Demo.DataAccessLayer.Data
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
             // get Assambly that contain ApplicationDbContext
-            //modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+            //modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly); 
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
