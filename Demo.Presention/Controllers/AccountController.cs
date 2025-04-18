@@ -1,4 +1,5 @@
 ﻿using Demo.DataAccessLayer.Models.IdentityModel;
+using Demo.Presention.Utilities;
 using Demo.Presention.ViewModels.AccountViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -44,7 +45,7 @@ namespace Demo.Presention.Controllers
         }
         #endregion
 
-        #region Login
+        #region Login And Logout
 
         [HttpGet]
         public IActionResult Login()
@@ -101,6 +102,88 @@ namespace Demo.Presention.Controllers
         }
 
         #endregion
+
+        #region Forget Password
+
+        [HttpGet]
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult SendResetPasswordLink(ForgetPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var user = _userManager.FindByEmailAsync(model.Email).Result;
+                    if (user != null)
+                    {
+                        // Generate Token
+                        var token = _userManager.GeneratePasswordResetTokenAsync(user).Result;
+                        var Link = Url.Action("ResetPassword", "Account", new { email = model.Email , token }, Request.Scheme);
+                        var Email = new Email()
+                        {
+                            To = model.Email,
+                            Subject = "Reset Password",
+                            Body = Link
+                        };
+                        // Send Email
+                        EmailSettings.SendEmail(Email);
+                        return RedirectToAction(nameof(CheckYourInBox));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
+            }
+            return View(nameof(ForgetPassword),model);
+        }
+
+
+        [HttpGet]
+        public IActionResult CheckYourInBox() => View();
+
+        [HttpGet]
+        public IActionResult ResetPassword(string email , string token) 
+        {
+            TempData["Email"] = email;
+            TempData["Token"] = token;
+            return View();
+        }
+        [HttpPost]
+        public IActionResult ResetPassword(ResetPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var email = TempData["Email"] as string ?? "";
+                    var token = TempData["token"] as string ?? "";
+
+                    var user = _userManager.FindByEmailAsync(email).Result;
+                    if(user != null)
+                    {
+                        var res = _userManager.ResetPasswordAsync(user,token,model.Password).Result;
+                        if(res.Succeeded)
+                            return RedirectToAction(nameof(Login));
+                        else
+                            foreach (var error in res.Errors)
+                                ModelState.AddModelError("", error.Description);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
+            }
+            return View(model);
+        }
+        #endregion
+
 
     }
 }
