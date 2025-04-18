@@ -39,7 +39,7 @@ namespace Demo.Presention
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
-            }).AddEntityFrameworkStores<ApplicationDbContext>();
+            }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
             //builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();

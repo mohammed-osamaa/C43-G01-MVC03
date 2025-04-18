@@ -121,14 +121,18 @@ namespace Demo.Presention.Controllers
                     var user = _userManager.FindByEmailAsync(model.Email).Result;
                     if (user != null)
                     {
+                        // Generate Token
+                        var token = _userManager.GeneratePasswordResetTokenAsync(user).Result;
+                        var Link = Url.Action("ResetPassword", "Account", new { email = model.Email , token }, Request.Scheme);
                         var Email = new Email()
                         {
                             To = model.Email,
                             Subject = "Reset Password",
-                            //Body = $"<h1>Reset Password</h1><p>Click <a href='https://localhost:5001/Account/ResetPassword?email={model.Email}'>here</a> to reset your password.</p>"
+                            Body = Link
                         };
                         // Send Email
-
+                        EmailSettings.SendEmail(Email);
+                        return RedirectToAction(nameof(CheckYourInBox));
                     }
                 }
                 catch (Exception ex)
@@ -139,6 +143,45 @@ namespace Demo.Presention.Controllers
             return View(nameof(ForgetPassword),model);
         }
 
+
+        [HttpGet]
+        public IActionResult CheckYourInBox() => View();
+
+        [HttpGet]
+        public IActionResult ResetPassword(string email , string token) 
+        {
+            TempData["Email"] = email;
+            TempData["Token"] = token;
+            return View();
+        }
+        [HttpPost]
+        public IActionResult ResetPassword(ResetPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var email = TempData["Email"] as string ?? "";
+                    var token = TempData["token"] as string ?? "";
+
+                    var user = _userManager.FindByEmailAsync(email).Result;
+                    if(user != null)
+                    {
+                        var res = _userManager.ResetPasswordAsync(user,token,model.Password).Result;
+                        if(res.Succeeded)
+                            return RedirectToAction(nameof(Login));
+                        else
+                            foreach (var error in res.Errors)
+                                ModelState.AddModelError("", error.Description);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
+            }
+            return View(model);
+        }
         #endregion
 
 
