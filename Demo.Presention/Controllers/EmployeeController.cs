@@ -2,10 +2,12 @@
 using Demo.BusinessLogicLayer.Services.DepartmentServices;
 using Demo.BusinessLogicLayer.Services.EmployeeServices;
 using Demo.Presention.ViewModels.EmployeeViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.Presention.Controllers
 {
+    [Authorize]
     public class EmployeeController(IEmployeeServices _employeeServices
         , ILogger<EmployeeController> _logger ,
         IWebHostEnvironment _environment) : Controller
