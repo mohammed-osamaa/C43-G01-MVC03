@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Demo.DataAccessLayer.Repositories.Interfaces
 {
-    public interface IGenericRepository<T> where T : BaseEntity
+    public interface IGenericRepository<T> where T : class
     {
         void add(T enity);
         void Delete(T entity);
