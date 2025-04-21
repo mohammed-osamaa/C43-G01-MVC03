@@ -23,6 +23,7 @@ namespace Demo.DataAccessLayer.Repositories.Classes
 
         public IDepartmentRepository DepartmentRepository => _departmentRepository.Value;
 
+
         public int SaveChanges()
         {
             return _dbContext.SaveChanges();

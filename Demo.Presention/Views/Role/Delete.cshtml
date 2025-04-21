@@ -1,0 +1,40 @@
+﻿@using Demo.BusinessLogicLayer.DTOS.RoleDTOS
+@model RoleDto
+@{
+    ViewData["Title"] = "Delete Role";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="card shadow rounded border-danger">
+        <div class="card-header bg-danger text-white text-center">
+            <h2>Delete Role</h2>
+        </div>
+
+        <div class="card-body">
+            <h4 class="text-center mb-4">Are you sure you want to delete this role?</h4>
+
+            <dl class="row">
+                <dt class="col-sm-3">ID</dt>
+                <dd class="col-sm-9">@Model.Id</dd>
+
+                <dt class="col-sm-3">Name</dt>
+                <dd class="col-sm-9">@Model.Name</dd>
+            </dl>
+
+            <form asp-action="Delete" method="post">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="Name" />
+
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i> Confirm Delete
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
