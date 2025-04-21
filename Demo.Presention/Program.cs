@@ -2,6 +2,7 @@ using Demo.BusinessLogicLayer.Profiles;
 using Demo.BusinessLogicLayer.Services.AttachmentServises;
 using Demo.BusinessLogicLayer.Services.DepartmentServices;
 using Demo.BusinessLogicLayer.Services.EmployeeServices;
+using Demo.BusinessLogicLayer.Services.RoleServices;
 using Demo.BusinessLogicLayer.Services.UserServices;
 using Demo.DataAccessLayer.Data;
 using Demo.DataAccessLayer.Models.IdentityModel;
@@ -50,6 +51,7 @@ namespace Demo.Presention
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IAttachmentServices, AttachmentServises>();
             builder.Services.AddScoped<IUserServices, UserServices>();
+            builder .Services.AddScoped<IRoleServices, RoleServices>();
             #endregion
 
             var app = builder.Build();

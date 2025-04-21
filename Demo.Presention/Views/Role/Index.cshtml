@@ -1,0 +1,79 @@
+﻿@using Demo.BusinessLogicLayer.DTOS.RoleDTOS
+@model IEnumerable<RoleDto>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="card shadow rounded">
+        <div class="card-header bg-primary text-white text-center">
+            <h2>All Roles</h2>
+        </div>
+        
+        <div class="card-body">
+            <form asp-action="Index" class="row g-2 mb-4" method="get">
+                <div class="col-md-9">
+                    <input class="form-control" type="text" name="Search" value="@ViewData["SearchName"]" placeholder="Search Role By Name" />
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-outline-primary w-100">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+            </form>
+            <div class="d-flex justify-content-start">
+                <a class="btn btn-sm btn-outline-success mb-3" asp-action="Create">
+                    <i class="fas fa-plus"></i> Add User
+                </a>
+            </div>
+
+            @if (Model?.Any() ?? false)
+            {
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover text-center align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>@Html.DisplayNameFor(d => d.Id)</th>
+                                <th>@Html.DisplayNameFor(d => d.Name)</th>
+                                <th>Details</th>
+                                <th>Update</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var role in Model)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(d => role.Id)</td>
+                                    <td>@Html.DisplayFor(d => role.Name)</td>
+                                    <td>
+                                        <a class="btn btn-sm btn-outline-info" asp-action="Details" asp-route-id="@role.Id">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-sm btn-outline-success" asp-action="Edit" asp-route-id="@role.Id">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@role.Id">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info text-center mt-4">
+                    <h4>No Roles Found !!</h4>
+                </div>
+            }
+        </div>
+    </div>
+</div>
