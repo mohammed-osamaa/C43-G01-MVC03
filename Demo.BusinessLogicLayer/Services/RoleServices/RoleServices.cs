@@ -12,9 +12,13 @@ namespace Demo.BusinessLogicLayer.Services.RoleServices
 {
     public class RoleServices(RoleManager<IdentityRole> _roleManager , IMapper _mapper) : IRoleServices
     {
-        public IEnumerable<RoleDto> GetAllRoles()
+        public IEnumerable<RoleDto> GetAllRoles(string? Search)
         {
-            var roles = _roleManager.Roles.ToList();
+            IEnumerable<IdentityRole> roles;
+            if (string.IsNullOrWhiteSpace(Search))
+                roles = _roleManager.Roles.ToList();
+            else
+                roles = _roleManager.Roles.Where(R => R.Name.ToLower().Contains(Search.ToLower())).ToList();
             var RolesDtos = _mapper.Map<IEnumerable<RoleDto>>(roles);
             return RolesDtos;
         }

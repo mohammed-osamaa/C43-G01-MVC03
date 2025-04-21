@@ -10,7 +10,7 @@ namespace Demo.BusinessLogicLayer.Services.RoleServices
 {
     public interface IRoleServices
     {
-        IEnumerable<RoleDto> GetAllRoles();
+        IEnumerable<RoleDto> GetAllRoles(string? Search);
         RoleDto? GetRoleById(string id);
         bool CreateRole(CreatedRole role);
         bool UpdateRole(RoleDto role);

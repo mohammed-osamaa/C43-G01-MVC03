@@ -7,9 +7,10 @@ namespace Demo.Presention.Controllers
 {
     public class RoleController(IRoleServices _roleServices) : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(string? Search)
         {
-            var roles = _roleServices.GetAllRoles();
+            var roles = _roleServices.GetAllRoles(Search);
+            ViewData["SearchName"] = Search;
             return View(roles);
         }
         [HttpGet]
