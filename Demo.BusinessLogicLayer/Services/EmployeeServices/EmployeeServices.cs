@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Demo.BusinessLogicLayer.DTOS.EmployeeDTOs;
 using Demo.BusinessLogicLayer.Factory;
+using Demo.BusinessLogicLayer.Services.AttachmentServises;
 using Demo.DataAccessLayer.Models.EmployeesModel;
 using Demo.DataAccessLayer.Repositories.Interfaces;
 using System;
@@ -11,24 +12,34 @@ using System.Threading.Tasks;
 
 namespace Demo.BusinessLogicLayer.Services.EmployeeServices
 {
-    public class EmployeeServices(IEmployeeRepository _employeeRepository, IMapper _mapper) : IEmployeeServices
+    public class EmployeeServices(IUnitOfWork _unitOfWork, IMapper _mapper,IAttachmentServices _attachmentServices) : IEmployeeServices
     {
-        public IEnumerable<EmployeeDto> GetAllEmployees()
+        public IEnumerable<EmployeeDto> GetAllEmployees(string? EmployeeSearchName)
         {
-            var Emps = _employeeRepository.GetAll(E => new EmployeeDto 
-            {
-                Id = E.Id,
-                Name = E.Name,
-                Age = E.Age,
-                Salary = E.Salary,
-            }).Where(E=>E.Age < 25); // Filter in IEnumerable<>
+            //var Emps = _employeeRepository.GetAll(E => new EmployeeDto
+            //{
+            //    Id = E.Id,
+            //    Name = E.Name,
+            //    Age = E.Age,
+            //    Salary = E.Salary,
+            //    IsActive = E.IsActive,
+            //    Gender = E.Gender,
+            //    Email = E.Email,
+            //    EmployeeType = E.EmployeeType
+            //});
             //return Emps.Select(E => E.ToDTO()).ToList();
-            return Emps;
+            IEnumerable<Employee> Emps;
+            if (string.IsNullOrEmpty(EmployeeSearchName))
+                Emps = _unitOfWork.EmployeeRepository.GetAll();
+            else
+                Emps = _unitOfWork.EmployeeRepository.GetAll(E => E.Name.ToLower().Contains(EmployeeSearchName.ToLower()));
+            var EmpsDTO = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeDto>>(Emps);
+            return EmpsDTO;
         }
 
         public EmployeeAllDetailsDTO? GetById(int id)
         {
-            var emp = _employeeRepository.GetById(id);
+            var emp = _unitOfWork.EmployeeRepository.GetById(id);
             //return emp?.ToDetailsDTo();
             if (emp == null) return null;
             var EmpAllDetails = _mapper.Map<Employee,EmployeeAllDetailsDTO>(emp);
@@ -38,20 +49,36 @@ namespace Demo.BusinessLogicLayer.Services.EmployeeServices
         {
             //var Emp = dto.ToEntity();
             var Emp = _mapper.Map<CreatedEmployeeDTO , Employee>(dto);
-            var res = _employeeRepository.add(Emp);
-            return res > 0 ? true : false;
+            if (dto.ProfileImage is not null)
+                Emp.ImageName = _attachmentServices.UploadFile(dto.ProfileImage, "Images");
+            _unitOfWork.EmployeeRepository.add(Emp);
+            return _unitOfWork.SaveChanges() > 0 ? true : false;
         }
 
         public bool UpdateExistedEmployee(UpdatedEmployeeDTO dto)
         {
-            //var Emp = dto.ToEntity();
-            var Emp = _mapper.Map<UpdatedEmployeeDTO, Employee>(dto);
-            var res = _employeeRepository.Update(Emp);
-            return res > 0 ? true : false;
+            var emp = _unitOfWork.EmployeeRepository.GetById(dto.Id);
+
+            if (emp == null) return false;
+
+            _mapper.Map(dto, emp);
+
+            if (dto.ProfileImage is not null)
+            {
+                // Delete the old image from the server
+                 if(emp.ImageName != null)
+                 {
+                     var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Files\\Images", emp.ImageName);
+                     _attachmentServices.DeleteFile(oldImagePath);
+                 }
+                 emp.ImageName = _attachmentServices.UploadFile(dto.ProfileImage, "Images");
+            }  
+            _unitOfWork.EmployeeRepository.Update(emp);
+            return _unitOfWork.SaveChanges() > 0 ? true : false;
         }
         public bool DeleteExistedEmployee(int id)
         {
-            var emp = _employeeRepository.GetById(id);
+            var emp = _unitOfWork.EmployeeRepository.GetById(id);
             //// Hard Delete
             ///
             //if (emp != null)
@@ -64,7 +91,8 @@ namespace Demo.BusinessLogicLayer.Services.EmployeeServices
             ////Soft Delete
             if(emp == null) return false;
             emp.IsDeleted = true;
-            return _employeeRepository.Update(emp) > 0 ? true : false ;
+            _unitOfWork.EmployeeRepository.Update(emp);
+            return _unitOfWork.SaveChanges() > 0 ? true : false;
         }
 
     }

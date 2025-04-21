@@ -14,7 +14,13 @@ namespace Demo.DataAccessLayer.Data.Configrations
 
             //builder.Property(D => D.CreatedOn).HasDefaultValueSql("GETDATE()"); // Not Change , Execute within Insertion only
             //builder.Property(D => D.LastModifiedOn).HasComputedColumnSql("GETDATE()"); // Change once Modified Record
-             base.Configure(builder);
+
+            builder.HasMany(D => D.Employees)
+                .WithOne(E => E.Department)
+                .HasForeignKey(E => E.DepartmentId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            base.Configure(builder);
         }
     }
 

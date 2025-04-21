@@ -1,5 +1,6 @@
 ﻿using Demo.DataAccessLayer.Models.EmployeesModel;
 using Demo.DataAccessLayer.Models.Shared.Enums;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -46,5 +47,8 @@ namespace Demo.BusinessLogicLayer.DTOS.EmployeeDTOs
         public DateOnly HiringDate { get; set; }
         public Gender Gender { get; set; }
         public EmployeeType EmployeeType { get; set; }
+        public int? DepartmentId { get; set; }
+        [Display(Name = "Profile Image")]
+        public IFormFile? ProfileImage { get; set; }
     }
 }

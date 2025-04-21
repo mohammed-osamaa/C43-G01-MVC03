@@ -1,9 +1,14 @@
 using Demo.BusinessLogicLayer.Profiles;
+using Demo.BusinessLogicLayer.Services.AttachmentServises;
 using Demo.BusinessLogicLayer.Services.DepartmentServices;
 using Demo.BusinessLogicLayer.Services.EmployeeServices;
+using Demo.BusinessLogicLayer.Services.RoleServices;
+using Demo.BusinessLogicLayer.Services.UserServices;
 using Demo.DataAccessLayer.Data;
+using Demo.DataAccessLayer.Models.IdentityModel;
 using Demo.DataAccessLayer.Repositories.Classes;
 using Demo.DataAccessLayer.Repositories.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,13 +32,26 @@ namespace Demo.Presention
                 //options.UseSqlServer("ConnentionString"); 
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
                 // Go to AppSetting.json , Search ConnectionString Scope and Get it By Name (Default) 
+                options.UseLazyLoadingProxies();
             });
             
-            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.Password.RequiredLength = 6;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+            }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
+            //builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IDepartmentServices, DepartmentServices>();
             builder.Services.AddAutoMapper(typeof(MappingProiles).Assembly);
-            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IAttachmentServices, AttachmentServises>();
+            builder.Services.AddScoped<IUserServices, UserServices>();
+            builder .Services.AddScoped<IRoleServices, RoleServices>();
             #endregion
 
             var app = builder.Build();
@@ -51,11 +69,12 @@ namespace Demo.Presention
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Account}/{action=Register}/{id?}");
 
             app.Run();
         }
